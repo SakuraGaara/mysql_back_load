@@ -1,12 +1,8 @@
+# -*- coding: utf-8 -*-
 """
  Created by Sakura.Gaara on  2020/12/2 11:06
 """
-# from pylog import logutil
-#
-# logger=logutil.logs()
-#
-# logger.info("aaa")
 
-from pylog.logutil import Loger
+from pylog.logutil import Log
 
-logger=Loger()
+logger = Log.getLogger('sys')

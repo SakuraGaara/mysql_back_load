@@ -4,8 +4,15 @@
 import logging
 import os.path
 import time
+import coloredlogs
+from logging.handlers import TimedRotatingFileHandler
 
-VIEW_LOG_PATH='logs'
+VIEW_LOG_PATH = 'logs'
+
+coloredlogs.DEFAULT_FIELD_STYLES = {'asctime': {'color': 'green'}, 'hostname': {'color': 'magenta'},
+                                    'levelname': {'color': 'green', 'bold': True}, 'request_id': {'color': 'yellow'},
+                                    'name': {'color': 'blue'}, 'programname': {'color': 'cyan'},
+                                    'threadName': {'color': 'yellow'}}
 
 
 def mkdir(dir):
@@ -13,49 +20,41 @@ def mkdir(dir):
         os.mkdir(dir)
 
 
-def nowtime():
-    return time.strftime("%Y%m%d", time.localtime())
+def get_logfile(dir):
+    logfilename = 'app.log'
+    logfile = os.path.join(dir, logfilename)
+    return logfile
 
 
-class Loger:
-    def __init__(self, level=''):
-        self.logger=logging.getLogger("")
-        self.logger.handlers.clear()
+class Log:
+    __instances = {}
 
+    def __init__(self):
         mkdir(VIEW_LOG_PATH)
 
-        timestamp=nowtime()
-        logfilename="%s.log" % (timestamp)
-        logfilepath=os.path.join(VIEW_LOG_PATH,logfilename)
-        formatter = logging.Formatter('%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+    @classmethod
+    def getLogger(cls, name='sys'):
+        logfile = get_logfile(VIEW_LOG_PATH)
+        if name not in cls.__instances:
+            logger = logging.getLogger(name=name)
 
-        rotatingFileHandler=logging.FileHandler(logfilepath,mode='a')
-        rotatingFileHandler.setFormatter(formatter)
+            # fmt='[%(asctime)s] [%(levelname)s] [%(name)s] %(filename)s[line:%(lineno)d] [%(threadName)s]: %(message)s'
+            fmt = '[%(asctime)s] [%(hostname)s] [%(name)s] [%(process)d] %(levelname)s: %(message)s'
+            formatter = logging.Formatter(fmt)
 
-        console=logging.StreamHandler()
-        console.setLevel(logging.NOTSET)
-        console.setFormatter(formatter)
+            console = logging.StreamHandler()
+            console.setLevel(logging.INFO)
+            console.setFormatter(formatter)
+            logger.addHandler(console)
 
-        self.logger.addHandler(rotatingFileHandler)
-        self.logger.addHandler(console)
-        self.logger.setLevel(logging.NOTSET)
+            coloredlogs.install(fmt=fmt, level=logging.INFO, logger=logger)
 
-    def info(self, message):
-        self.logger.info(message)
+            fileHandler = TimedRotatingFileHandler(logfile, when='D', interval=60 * 60 * 24,
+                                                   backupCount=7, encoding='utf-8')
+            fileHandler.setFormatter(formatter)
+            fileHandler.setLevel(logging.NOTSET)
+            logger.addHandler(fileHandler)
 
-    def debug(self, message):
-        self.logger.debug(message)
+            cls.__instances[name] = logger
 
-    def warning(self, message):
-        self.logger.warning(message)
-
-    def error(self, message):
-        self.logger.error(message)
-
-
-
-#
-# logger=Loger()
-#
-# logger.info("aaa")
-
+        return cls.__instances[name]

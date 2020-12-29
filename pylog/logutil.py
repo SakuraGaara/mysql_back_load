@@ -2,8 +2,7 @@
  Created by Sakura.Gaara on  2020/12/1 17:58
 """
 import logging
-import os.path
-import time
+import os
 import coloredlogs
 from logging.handlers import TimedRotatingFileHandler
 

@@ -48,7 +48,7 @@ class Log:
 
             coloredlogs.install(fmt=fmt, level=logging.INFO, logger=logger)
 
-            fileHandler = TimedRotatingFileHandler(logfile, when='D', interval=60 * 60 * 24,
+            fileHandler = TimedRotatingFileHandler(logfile, when='D',
                                                    backupCount=7, encoding='utf-8')
             fileHandler.setFormatter(formatter)
             fileHandler.setLevel(logging.NOTSET)

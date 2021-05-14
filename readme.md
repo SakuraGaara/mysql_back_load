@@ -1,8 +1,8 @@
 ## mysql_back_load 备份导出，导入
 
-脚本的初衷是预发环境要与线上环境部分一直，所以经常要将线上环境的部分数据同步到预发环境
+脚本的初衷是预发环境要与线上环境部分一致，所以经常要将线上环境的部分数据同步到预发环境
 
-备份导出和导入主要通过mysql/mysql_backup.py 和mysql/mysql_load完成.py，备份单张表一个文件
+备份导出和导入主要通过mysql/mysql_backup.py 和mysql/mysql_load.py完成，备份单张表一个文件
 
 ### settings.py
 - structure_table: 默认备份表和数据，structure_table中添加表名，则只备份表结构

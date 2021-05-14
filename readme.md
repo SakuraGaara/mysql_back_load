@@ -10,6 +10,7 @@
 - back_config: 备份数据库的连接信息
 - load_config: 导入数据库的连接信息
 - BACKUP_PATH: 备份文件路径,默认/data/backup
+- auto.py: 可自行修改定期备份时间
 
 
 ### 启动方式
@@ -20,7 +21,7 @@
 ```python main.py```
 
 ### Docker方式
-修改设置structure_table/ignore_table/back_config/load_config/BACKUP_PATH等信息
+修改设置structure_table/ignore_table/back_config/load_config/BACKUP_PATH/auto.py等信息
 
 ```
 docker build -t mysql_back_load:v1 .

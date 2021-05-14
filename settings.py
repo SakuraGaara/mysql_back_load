@@ -15,7 +15,7 @@ ignore_table = [
     "table4"
 ]
 # 备份表存储目录
-BACKUP_PATH="/home/admin/mysqlbackup/backup/"
+BACKUP_PATH="/data/backup/"
 # 备份数据库连接配置
 back_config = {
     'BACKUP_HOST': "127.0.0.1",
